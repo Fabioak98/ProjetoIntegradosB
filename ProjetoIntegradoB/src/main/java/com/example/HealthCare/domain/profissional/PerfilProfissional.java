@@ -13,11 +13,7 @@ import java.util.List;
 @Getter
 @Setter
 public class PerfilProfissional {
-    private DayOfWeek diasdeAtendimento;
+    private List<DayOfWeek> diasdeAtendimento;
     private List<String> horarios;
 
-
-    public PerfilProfissional(DadosCrudPerfil dados){
-
-    }
 }

@@ -1,7 +1,6 @@
 package com.example.HealthCare.controller;
 
 import com.example.HealthCare.domain.profissional.*;
-import jakarta.validation.ReportAsSingleViolation;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -62,8 +61,14 @@ public class ProfissionalController {
 
     @PostMapping("/horarios")
     @Transactional
-    public ResponseEntity registraPerfil(DadosCrudPerfil dados){
+    public ResponseEntity registraPerfil(@RequestBody @Valid DadosCrudPerfil dados,UriComponentsBuilder uriComponentsBuilder){
         var profissional = repository.findById(dados.id()).get();
-        return ResponseEntity.created().build();
+
+        profissional.atualizaAgenda(dados);
+
+        var uri = uriComponentsBuilder.path("/profissional/perfil/{id}").buildAndExpand(profissional.getId()).toUri();
+
+        repository.save(profissional);
+        return ResponseEntity.created(uri).build();
     }
 }

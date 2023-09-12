@@ -61,7 +61,7 @@ public class AutenticacaoController {
         usuarioRepository.save(usuario);
 
 
-        var uri = uriComponentsBuilder.path("/medicos/{id}").buildAndExpand(medico.getId()).toUri();
+        var uri = uriComponentsBuilder.path("/profissional/{id}").buildAndExpand(medico.getId()).toUri();
 
         return ResponseEntity.created(uri).body(new DadosDetalhamentoProfissional(medico));
     }

@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.DayOfWeek;
-import java.util.List;
+import java.util.*;
 
 @Getter
 @Setter
@@ -30,7 +30,7 @@ public class Profissional {
     private Endereco endereco;
     private String telefone;
     private Boolean ativo;
-    private PerfilProfissional perfil;
+    private Map<DayOfWeek,List<String>> agenda;
 
     public Profissional(DadosCadastroProfissional dados){
         this.nome= dados.nome();
@@ -39,7 +39,18 @@ public class Profissional {
         this.especialidade = dados.especialidade();
         this.endereco = new Endereco(dados.endereco());
         this.telefone = dados.telefone();
+        this.agenda = inicialAgenda();
         this.ativo = true;
+    }
+
+    private Map<DayOfWeek,List<String>> inicialAgenda() {
+        Map<DayOfWeek,List<String>> hash = new HashMap<DayOfWeek,List<String>>();
+
+        for(DayOfWeek day : DayOfWeek.values()){
+            hash.put(day,null);
+        }
+        return hash;
+
     }
 
 
@@ -55,7 +66,14 @@ public class Profissional {
         }
     }
 
+    public void atualizaAgenda(DadosCrudPerfil dadosCrudPerfil){
+        for(DayOfWeek day: dadosCrudPerfil.horarios().keySet()){
+            this.agenda.put(day,dadosCrudPerfil.horarios().get(day));
+        }
+    }
+
     public void excluir() {
         this.ativo = false;
     }
+
 }
