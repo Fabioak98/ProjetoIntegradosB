@@ -18,16 +18,6 @@ public class ProfissionalController {
     @Autowired
     private ProfissionalRepository repository;
 
-    /*@PostMapping
-    @Transactional
-    public ResponseEntity cadastra(@RequestBody DadosCadastroProfissional dados, UriComponentsBuilder uriComponentsBuilder){
-        var profissional = new Profissional(dados);
-        repository.save(profissional);
-
-        var uri = uriComponentsBuilder.path("/profissional/{id}").buildAndExpand(profissional.getId()).toUri();
-
-        return ResponseEntity.created(uri).body(new DadosDetalhamentoProfissional(profissional));
-    }*/
 
     @GetMapping
     public ResponseEntity<Page<DadosListagemProfissional>> listar(@PageableDefault(size = 1,sort = {"nome"}) Pageable paginacao){
@@ -61,7 +51,7 @@ public class ProfissionalController {
 
     @PostMapping("/horarios")
     @Transactional
-    public ResponseEntity registraPerfil(@RequestBody @Valid DadosCrudPerfil dados,UriComponentsBuilder uriComponentsBuilder){
+    public ResponseEntity registraHorarios(@RequestBody @Valid DadosCrudPerfil dados,UriComponentsBuilder uriComponentsBuilder){
         var profissional = repository.findById(dados.id()).get();
 
         profissional.atualizaAgenda(dados);
@@ -70,5 +60,11 @@ public class ProfissionalController {
 
         repository.save(profissional);
         return ResponseEntity.created(uri).build();
+    }
+
+    @GetMapping("/horarios/{id}")
+    public ResponseEntity pegaAgenda(@PathVariable String id){
+        var profissional = repository.findById(id).get();
+        return ResponseEntity.ok(new DadosAgendaProfissional(profissional.getAgenda()));
     }
 }

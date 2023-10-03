@@ -13,7 +13,6 @@ public record DadosAgendamentoConsulta(
         String idPaciente,
         @NotNull
         String descricao,
-        @NotBlank
         @Future
         LocalDateTime data) {
 }

@@ -1,11 +1,16 @@
 package com.example.HealthCare.domain.paciente;
 
 
+import com.example.HealthCare.domain.consulta.Consulta;
 import com.example.HealthCare.domain.endereco.Endereco;
 import lombok.*;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Document
 @Getter
@@ -21,6 +26,9 @@ public class Paciente {
     private String telefone;
     private String cpf;
     private Endereco endereco;
+    private Boolean ativo;
+    @DBRef
+    private List<Consulta> consultas;
 
     public Paciente(DadosCadastroPaciente dados){
         this.nome = dados.nome();
@@ -28,5 +36,15 @@ public class Paciente {
         this.telefone = dados.telefone();
         this.cpf = dados.cpf();
         this.endereco = new Endereco(dados.endereco());
+        this.ativo = true;
+        this.consultas = new ArrayList<Consulta>();
+    }
+
+    public void excluir() {
+        this.ativo = false;
+    }
+
+    public void addConsulta(Consulta consulta) {
+        this.consultas.add(consulta);
     }
 }

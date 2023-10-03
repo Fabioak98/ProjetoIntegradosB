@@ -10,4 +10,6 @@ import java.util.Optional;
 public interface ProfissionalRepository extends MongoRepository<Profissional,String> {
     @Query("{'ativo': true}")
     Page<Profissional> findAllByAtivoTrue(Pageable paginacao);
+
+    Profissional findByEmail(String login);
 }

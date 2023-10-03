@@ -1,10 +1,15 @@
 package com.example.HealthCare.controller;
 
+import com.example.HealthCare.domain.paciente.DadosCadastroPaciente;
+import com.example.HealthCare.domain.paciente.DadosDetalhamentoPaciente;
+import com.example.HealthCare.domain.paciente.Paciente;
+import com.example.HealthCare.domain.paciente.PacienteRepository;
 import com.example.HealthCare.domain.profissional.DadosCadastroProfissional;
 import com.example.HealthCare.domain.profissional.DadosDetalhamentoProfissional;
 import com.example.HealthCare.domain.profissional.Profissional;
 import com.example.HealthCare.domain.profissional.ProfissionalRepository;
 import com.example.HealthCare.domain.usuario.DadosLogin;
+import com.example.HealthCare.domain.usuario.Tipo;
 import com.example.HealthCare.domain.usuario.Usuario;
 import com.example.HealthCare.domain.usuario.UsuarioRepository;
 import com.example.HealthCare.infra.security.DadosToken;
@@ -31,6 +36,9 @@ public class AutenticacaoController {
     private UsuarioRepository usuarioRepository;
 
     @Autowired
+    private PacienteRepository pacienteRepository;
+
+    @Autowired
     private AuthenticationManager manager;
 
     @Autowired
@@ -46,9 +54,19 @@ public class AutenticacaoController {
         System.out.println(authetication);
         System.out.println(authenticationToken);
 
+        var usuario = usuarioRepository.findByEmail(authenticationToken.getPrincipal().toString());
+        String id;
+        if(usuario.getTipo() == Tipo.PROFISSIONAL){
+            id = medicoRepository.findByEmail(usuario.getLogin()).getId();
+        }
+        else{
+            id = pacienteRepository.findByEmail(usuario.getLogin()).getId();
+        }
+
         var tokenJWT = tokenService.gerarToken((Usuario) authetication.getPrincipal());
 
-        return ResponseEntity.ok(new DadosToken(tokenJWT));
+
+        return ResponseEntity.ok(new DadosToken(id,tokenJWT,usuario.getTipo()));
     }
 
     @PostMapping("/cadastro/profissional")
@@ -57,12 +75,26 @@ public class AutenticacaoController {
         var medico = new Profissional(dados);
         medicoRepository.save(medico);
 
-        var usuario = new Usuario(dados.email(),passwordEncoder.encode(dados.senha()));
+        var usuario = new Usuario(dados.email(),passwordEncoder.encode(dados.senha()), Tipo.PROFISSIONAL);
         usuarioRepository.save(usuario);
 
 
         var uri = uriComponentsBuilder.path("/profissional/{id}").buildAndExpand(medico.getId()).toUri();
 
         return ResponseEntity.created(uri).body(new DadosDetalhamentoProfissional(medico));
+    }
+
+    @PostMapping("/cadastro/paciente")
+    @Transactional
+    public ResponseEntity cadastroPaciente(@RequestBody @Valid DadosCadastroPaciente dados, UriComponentsBuilder uriComponentsBuilder){
+        var paciente = new Paciente(dados);
+        pacienteRepository.save(paciente);
+
+        var usuario = new Usuario(dados.email(),passwordEncoder.encode(dados.senha()), Tipo.PACIENTE);
+        usuarioRepository.save(usuario);
+
+        var uri = uriComponentsBuilder.path("/paciente/{id}").buildAndExpand(paciente.getId()).toUri();
+
+        return ResponseEntity.created(uri).body(new DadosDetalhamentoPaciente(paciente));
     }
 }

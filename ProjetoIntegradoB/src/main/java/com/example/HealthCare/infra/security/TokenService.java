@@ -19,7 +19,7 @@ public class TokenService {
         try {
             var algoritmo = Algorithm.HMAC256(secret);
             return JWT.create()
-                    .withIssuer("API voll.med")
+                    .withIssuer("API HealthCare")
                     .withSubject(usuario.getLogin())
                     .withExpiresAt(dataExpiracao())
                     .sign(algoritmo);
@@ -32,7 +32,7 @@ public class TokenService {
         try {
             var algoritmo = Algorithm.HMAC256(secret);
             return JWT.require(algoritmo)
-                    .withIssuer("API voll.med")
+                    .withIssuer("API HealthCare")
                     .build()
                     .verify(tokenJWT)
                     .getSubject();

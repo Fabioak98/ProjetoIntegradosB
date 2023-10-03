@@ -1,15 +1,16 @@
 package com.example.HealthCare.domain.profissional;
 
+import com.example.HealthCare.domain.consulta.Consulta;
 import com.example.HealthCare.domain.endereco.Endereco;
+import lombok.*;
 import org.springframework.data.annotation.Id;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.DayOfWeek;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.*;
 
 @Getter
@@ -31,6 +32,8 @@ public class Profissional {
     private String telefone;
     private Boolean ativo;
     private Map<DayOfWeek,List<String>> agenda;
+    @DBRef
+    private List<Consulta> consultas;
 
     public Profissional(DadosCadastroProfissional dados){
         this.nome= dados.nome();
@@ -40,6 +43,7 @@ public class Profissional {
         this.endereco = new Endereco(dados.endereco());
         this.telefone = dados.telefone();
         this.agenda = inicialAgenda();
+        this.consultas = new ArrayList<Consulta>();
         this.ativo = true;
     }
 
@@ -76,4 +80,38 @@ public class Profissional {
         this.ativo = false;
     }
 
+    public boolean validaHorario(LocalDateTime data){
+        var diaSemana = data.getDayOfWeek();
+        int horas = data.getHour();
+        int minutos = data.getMinute();
+        String horario = String.format("%02d:%02d",horas,minutos);
+        var listaHorarios = this.agenda.get(diaSemana);
+
+        if(listaHorarios == null){
+            return false;
+        }
+
+        if(listaHorarios.contains(horario)){
+            Consulta consulta = null;
+            for(Consulta c : consultas){
+                if(c.getData().minusHours(3).equals(data)){
+                    consulta = c;
+                    break;
+                }
+            }
+            System.out.println(consultas);
+            if(consulta == null){
+                return true;
+            }
+            else {
+                System.out.println(consulta.getData());
+                return false;
+            }
+        }
+        return false;
+    }
+
+    public void addConsulta(Consulta consulta) {
+        this.consultas.add(consulta);
+    }
 }

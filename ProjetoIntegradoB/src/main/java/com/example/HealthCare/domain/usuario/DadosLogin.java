@@ -1,4 +1,10 @@
 package com.example.HealthCare.domain.usuario;
 
-public record DadosLogin(String login,String senha) {
+import com.fasterxml.jackson.annotation.JsonAlias;
+
+public record DadosLogin(
+        @JsonAlias("username")
+        String login,
+        @JsonAlias("password")
+        String senha) {
 }

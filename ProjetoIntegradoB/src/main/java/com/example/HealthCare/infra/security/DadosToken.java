@@ -1,4 +1,6 @@
 package com.example.HealthCare.infra.security;
 
-public record DadosToken(String token) {
+import com.example.HealthCare.domain.usuario.Tipo;
+
+public record DadosToken(String id, String token, Tipo tipo) {
 }

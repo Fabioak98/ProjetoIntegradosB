@@ -26,10 +26,12 @@ public class Usuario implements UserDetails {
     @Indexed(unique = true)
     private String login;
     private String senha;
+    private Tipo tipo;
 
-    public Usuario(String email,String senha){
+    public Usuario(String email,String senha,Tipo tipo){
         this.login = email;
         this.senha = senha;
+        this.tipo = tipo;
     }
 
     @Override
