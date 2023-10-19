@@ -51,8 +51,6 @@ public class AutenticacaoController {
     public ResponseEntity efetuarLogin(@RequestBody @Valid DadosLogin dados){
         var authenticationToken = new UsernamePasswordAuthenticationToken(dados.login(),dados.senha());
         var authetication = manager.authenticate(authenticationToken);
-        System.out.println(authetication);
-        System.out.println(authenticationToken);
 
         var usuario = usuarioRepository.findByEmail(authenticationToken.getPrincipal().toString());
         String id;

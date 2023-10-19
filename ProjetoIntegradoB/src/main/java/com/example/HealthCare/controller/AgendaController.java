@@ -3,6 +3,7 @@ package com.example.HealthCare.controller;
 import com.example.HealthCare.domain.consulta.Agendamento;
 import com.example.HealthCare.domain.consulta.Consulta;
 import com.example.HealthCare.domain.consulta.DadosAgendamentoConsulta;
+import com.example.HealthCare.domain.consulta.DadosCancelamentoConsulta;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -30,8 +31,8 @@ public class AgendaController {
 
     @DeleteMapping("/{id}")
     @Transactional
-    public ResponseEntity cancelaConsulta(@PathVariable String id){
-        agendamento.cancelaConsulta(id);
+    public ResponseEntity cancelaConsulta(DadosCancelamentoConsulta dados){
+        agendamento.cancelaConsulta(dados.idConsulta(), dados.idPaciente(), dados.idProf());
         return ResponseEntity.ok().build();
     }
 

@@ -92,19 +92,11 @@ public class Profissional {
         }
 
         if(listaHorarios.contains(horario)){
-            Consulta consulta = null;
-            for(Consulta c : consultas){
-                if(c.getData().minusHours(3).equals(data)){
-                    consulta = c;
-                    break;
-                }
-            }
-            System.out.println(consultas);
+            Consulta consulta = consultas.stream().filter(consulta1 -> consulta1.getData().equals(data)).findAny().orElse(null);
             if(consulta == null){
                 return true;
             }
             else {
-                System.out.println(consulta.getData());
                 return false;
             }
         }

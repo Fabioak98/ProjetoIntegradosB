@@ -42,4 +42,8 @@ public class Consulta {
     public String toString() {
         return "Id: " + id + ", Data:" + data + ", Profissional:" + profissional.getNome();
     }
+
+    public void addListadeEspera(Paciente paciente){
+        this.listaEspera.add(paciente);
+    }
 }
