@@ -7,7 +7,6 @@ public record DadosCancelamentoConsulta(
         String idConsulta,
         @NotBlank
         String idPaciente,
-
         @NotBlank
         String idProf) {
 }

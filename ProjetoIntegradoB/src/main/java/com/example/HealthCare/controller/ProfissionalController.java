@@ -11,6 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/profissional")
 public class ProfissionalController {
@@ -66,5 +68,11 @@ public class ProfissionalController {
     public ResponseEntity pegaAgenda(@PathVariable String id){
         var profissional = repository.findById(id).get();
         return ResponseEntity.ok(new DadosAgendaProfissional(profissional.getAgenda()));
+    }
+
+    @GetMapping("/busca_especialidade/{especialidade}")
+    public ResponseEntity<List<DadosListagemProfissional>> consultaEspecialidade(@PathVariable String especialidade){
+        var lista = repository.findByEspecialidade(especialidade.toUpperCase()).stream().map(DadosListagemProfissional:: new).toList();
+        return ResponseEntity.ok(lista);
     }
 }

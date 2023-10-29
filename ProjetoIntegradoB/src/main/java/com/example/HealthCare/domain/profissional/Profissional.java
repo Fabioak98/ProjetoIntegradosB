@@ -103,6 +103,15 @@ public class Profissional {
         return false;
     }
 
+    public void removerConsulta(Consulta consulta) throws Exception {
+        if(consulta.getProfissional() == this){
+            this.consultas.remove(consulta);
+        }
+        else{
+            throw new Exception();
+        }
+    }
+
     public void addConsulta(Consulta consulta) {
         this.consultas.add(consulta);
     }

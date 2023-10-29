@@ -9,6 +9,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.nio.channels.IllegalSelectorException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,5 +47,18 @@ public class Paciente {
 
     public void addConsulta(Consulta consulta) {
         this.consultas.add(consulta);
+    }
+
+    public void removeConsulta(Consulta consulta) {
+        if(this.consultas.contains(consulta)){
+            this.consultas.remove(consulta);
+        }
+        else
+            throw new  IllegalSelectorException();
+    }
+
+    @Override
+    public String toString() {
+        return "Nome: " + this.nome + " id:"+ this.id;
     }
 }

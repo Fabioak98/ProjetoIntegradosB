@@ -5,11 +5,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface ProfissionalRepository extends MongoRepository<Profissional,String> {
     @Query("{'ativo': true}")
     Page<Profissional> findAllByAtivoTrue(Pageable paginacao);
 
+    List<Profissional> findByEspecialidade(String especialidade);
     Profissional findByEmail(String login);
 }

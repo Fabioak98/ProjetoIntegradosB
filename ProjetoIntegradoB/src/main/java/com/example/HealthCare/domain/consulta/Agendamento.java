@@ -11,6 +11,9 @@ import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,8 +26,13 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 @Service
+@EnableAsync
 public class Agendamento {
 
     @Autowired
@@ -86,37 +94,36 @@ public class Agendamento {
         }
     }
 
-    public void cancelaConsulta(String idConsulta, String idPaciente,String idProfissional){
+    public void cancelaConsulta(String idConsulta, String idPaciente,String idProfissional) throws ExecutionException, InterruptedException {
         Consulta consulta = consultaRepository.findById(idConsulta).get();
         Profissional profissional = profissionalRepository.findById(idProfissional).get();
         Paciente paciente = pacienteRepository.findById(idPaciente).get();
 
-        if(consulta.getPaciente() != paciente){
+        System.out.println(consulta.getPaciente().getId());
+        System.out.println(paciente.getId());
+
+        if(!consulta.getPaciente().getId().equals( paciente.getId())){
             throw new IllegalArgumentException("Esta consulta nao pertence a esse paciente");
         }
-        if (consulta.getProfissional() != profissional){
+        if (!consulta.getProfissional().getId().equals(profissional.getId())){
             throw new IllegalArgumentException("Esta consulta nao pertence a esse profissional");
         }
+        paciente.removeConsulta(consulta);
+        pacienteRepository.save(paciente);
 
-        if(consulta.getListaEspera() != null){
-            chamaListaEspera(consulta);
-        }
+        consulta.setPaciente(null);
+        consulta.setDescricao("");
+
+        chamaListaEspera(consulta);
+
 
     }
 
-    private void chamaListaEspera(Consulta consulta) {
-        var list = consulta.getListaEspera();
-        for (Paciente pacient : list){
-            //manda url
 
-        }
+    public void chamaListaEspera(Consulta consulta) throws InterruptedException {
+        Thread.sleep(60000);
     }
 
-
-    @DeleteMapping("/{id}")
-    @Transactional
-    public void cancelaConsulta(@PathVariable String id) {
-         var consulta = consultaRepository.findById(id).get();
-
+    public void reagendamento(DadosReagendamentoConsulta dados) {
     }
 }
