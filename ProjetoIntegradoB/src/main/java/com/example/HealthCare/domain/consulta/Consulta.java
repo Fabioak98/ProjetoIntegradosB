@@ -31,11 +31,13 @@ public class Consulta {
     private String descricao;
     @DBRef
     private List<Paciente> listaEspera;
+    private Status status;
 
     public Consulta(DadosAgendamentoConsulta dados){
         this.data = dados.data();
         this.descricao = dados.descricao();
         this.listaEspera = new ArrayList<>();
+        this.status = Status.CONFIRMADO;
     }
 
     @Override
@@ -45,5 +47,9 @@ public class Consulta {
 
     public void addListadeEspera(Paciente paciente){
         this.listaEspera.add(paciente);
+    }
+
+    public Paciente chamaPaciente() {
+        return listaEspera.remove(0);
     }
 }

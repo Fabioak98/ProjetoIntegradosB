@@ -28,6 +28,19 @@ public class TokenService {
         }
     }
 
+    public String gerarToken(String usuario,Instant Expira){
+        try {
+            var algoritmo = Algorithm.HMAC256(secret);
+            return JWT.create()
+                    .withIssuer("API HealthCare")
+                    .withSubject(usuario)
+                    .withExpiresAt(Expira)
+                    .sign(algoritmo);
+        } catch (JWTCreationException exception){
+            throw new RuntimeException("Erro na geracao do token",exception);
+        }
+    }
+
     public String getSubject(String tokenJWT) {
         try {
             var algoritmo = Algorithm.HMAC256(secret);
@@ -42,6 +55,6 @@ public class TokenService {
     }
 
     private Instant dataExpiracao() {
-        return LocalDateTime.now().plusDays(2).toInstant(ZoneOffset.of("-03:00"));
+        return LocalDateTime.now().plusDays(7).toInstant(ZoneOffset.of("-03:00"));
     }
 }

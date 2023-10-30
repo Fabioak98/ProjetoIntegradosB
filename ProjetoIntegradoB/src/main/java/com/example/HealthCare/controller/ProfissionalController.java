@@ -1,5 +1,9 @@
 package com.example.HealthCare.controller;
 
+import com.example.HealthCare.domain.avaliacao.DadosAvaliacao;
+import com.example.HealthCare.domain.consulta.Consulta;
+import com.example.HealthCare.domain.consulta.ConsultaRepository;
+import com.example.HealthCare.domain.consulta.DadosDetalhamentoConsulta;
 import com.example.HealthCare.domain.profissional.*;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +15,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
@@ -19,6 +27,9 @@ public class ProfissionalController {
 
     @Autowired
     private ProfissionalRepository repository;
+
+    @Autowired
+    private ConsultaRepository consultaRepository;
 
 
     @GetMapping
@@ -74,5 +85,34 @@ public class ProfissionalController {
     public ResponseEntity<List<DadosListagemProfissional>> consultaEspecialidade(@PathVariable String especialidade){
         var lista = repository.findByEspecialidade(especialidade.toUpperCase()).stream().map(DadosListagemProfissional:: new).toList();
         return ResponseEntity.ok(lista);
+    }
+
+    @PostMapping("/avaliacao")
+    @Transactional
+    public ResponseEntity avaliaProfissional(@RequestBody DadosAvaliacao dados){
+        var profissional = repository.findById(dados.idProfissional()).get();
+
+        profissional.novaNota(dados.nota());
+        repository.save(profissional);
+
+        return ResponseEntity.ok(new DadosDetalhamentoProfissional(profissional));
+    }
+
+    @GetMapping("/consultas/{data}&{id}")
+    public ResponseEntity<List<DadosDetalhamentoConsulta>> consultaDia(@PathVariable(value = "data") String data, @PathVariable(value = "id") String id){
+        var profissional = repository.findById(id).get();
+        System.out.println(profissional);
+        if(profissional != null){
+            var dia = LocalDate.parse(data, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            var dataM = dia.plusDays(1);
+
+            Instant apartir = dia.atStartOfDay(ZoneId.systemDefault()).toInstant();
+            Instant ate = dataM.atStartOfDay(ZoneId.systemDefault()).toInstant();
+
+
+            var consultas = consultaRepository.findByDataBetweenAndProfissional(apartir,ate,profissional).stream().map(DadosDetalhamentoConsulta:: new).toList();
+            return ResponseEntity.ok(consultas);
+        }
+        return ResponseEntity.notFound().build();
     }
 }

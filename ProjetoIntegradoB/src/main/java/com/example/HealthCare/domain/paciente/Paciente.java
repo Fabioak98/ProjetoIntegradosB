@@ -5,7 +5,9 @@ import com.example.HealthCare.domain.consulta.Consulta;
 import com.example.HealthCare.domain.endereco.Endereco;
 import lombok.*;
 
+import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -23,6 +25,7 @@ public class Paciente {
     @Id
     private String id;
     private String nome;
+    @Indexed(unique = true)
     private String email;
     private String telefone;
     private String cpf;
@@ -50,11 +53,13 @@ public class Paciente {
     }
 
     public void removeConsulta(Consulta consulta) {
-        if(this.consultas.contains(consulta)){
-            this.consultas.remove(consulta);
+        Consulta c = this.consultas.stream().filter(consulta1 -> consulta1.getId().equals(consulta.getId())).findFirst().orElse(null);
+        if(c != null){
+            this.consultas.remove(c);
         }
-        else
-            throw new  IllegalSelectorException();
+        else {
+            System.out.println("RemoveConsulta False");
+        }
     }
 
     @Override

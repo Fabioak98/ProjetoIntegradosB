@@ -63,7 +63,6 @@ public class AutenticacaoController {
 
         var tokenJWT = tokenService.gerarToken((Usuario) authetication.getPrincipal());
 
-
         return ResponseEntity.ok(new DadosToken(id,tokenJWT,usuario.getTipo()));
     }
 
@@ -86,9 +85,10 @@ public class AutenticacaoController {
     @Transactional
     public ResponseEntity cadastroPaciente(@RequestBody @Valid DadosCadastroPaciente dados, UriComponentsBuilder uriComponentsBuilder){
         var paciente = new Paciente(dados);
-        pacienteRepository.save(paciente);
 
         var usuario = new Usuario(dados.email(),passwordEncoder.encode(dados.senha()), Tipo.PACIENTE);
+
+        pacienteRepository.save(paciente);
         usuarioRepository.save(usuario);
 
         var uri = uriComponentsBuilder.path("/paciente/{id}").buildAndExpand(paciente.getId()).toUri();

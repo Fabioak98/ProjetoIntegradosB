@@ -44,6 +44,9 @@ public class Agendamento {
     @Autowired
     private ConsultaRepository consultaRepository;
 
+    @Autowired
+    private ReagendamentoManager reagendamentoManager;
+
     public Consulta agendaConsulta(DadosAgendamentoConsulta dados){
         var consulta = new Consulta(dados);
         var paciente = pacienteRepository.findById(dados.idPaciente()).get();
@@ -111,19 +114,30 @@ public class Agendamento {
         paciente.removeConsulta(consulta);
         pacienteRepository.save(paciente);
 
-        consulta.setPaciente(null);
         consulta.setDescricao("");
+        consulta.setStatus(Status.REAGENDANDO);
 
-        chamaListaEspera(consulta);
+        consulta = consultaRepository.save(consulta);
+
+        System.out.println("Main Thread " + Thread.currentThread());
+        reagendamentoManager.chamaListaEspera(consulta.getId());
 
 
     }
 
+    public void reagendamento(DadosReagendamentoConsulta dados) throws ExecutionException, InterruptedException {
+        var consultaAt = consultaRepository.findById(dados.idConsultaAT()).get();
+        var paciente = pacienteRepository.findById(dados.idPaciente()).get();
+        if(consultaAt.getPaciente() == null || consultaAt.getListaEspera().contains(paciente)){
+            var consultaRg = consultaRepository.findById(dados.idConsultaRG()).get();
+            if(consultaRg.getPaciente().getId().equals(dados.idPaciente())){
+                consultaAt.setDescricao(consultaRg.getDescricao());
+                consultaAt.setPaciente(paciente);
+                consultaAt.setStatus(Status.CONFIRMADO);
+                consultaRepository.save(consultaAt);
 
-    public void chamaListaEspera(Consulta consulta) throws InterruptedException {
-        Thread.sleep(60000);
-    }
-
-    public void reagendamento(DadosReagendamentoConsulta dados) {
+                cancelaConsulta(consultaRg.getId(), dados.idPaciente(), consultaRg.getProfissional().getId());
+            }
+        }
     }
 }

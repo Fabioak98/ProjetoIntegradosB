@@ -1,5 +1,6 @@
 package com.example.HealthCare.domain.profissional;
 
+import com.example.HealthCare.domain.avaliacao.Avaliacao;
 import com.example.HealthCare.domain.consulta.Consulta;
 import com.example.HealthCare.domain.endereco.Endereco;
 import lombok.*;
@@ -32,6 +33,7 @@ public class Profissional {
     private String telefone;
     private Boolean ativo;
     private Map<DayOfWeek,List<String>> agenda;
+    private Avaliacao avaliacao;
     @DBRef
     private List<Consulta> consultas;
 
@@ -44,6 +46,7 @@ public class Profissional {
         this.telefone = dados.telefone();
         this.agenda = inicialAgenda();
         this.consultas = new ArrayList<Consulta>();
+        this.avaliacao = new Avaliacao();
         this.ativo = true;
     }
 
@@ -114,5 +117,18 @@ public class Profissional {
 
     public void addConsulta(Consulta consulta) {
         this.consultas.add(consulta);
+    }
+
+    public void removeConsulta(Consulta consulta){
+        this.consultas.remove(consulta);
+    }
+
+    public void novaNota(int nota){
+        this.avaliacao.novaNota(nota);
+    }
+
+    @Override
+    public String toString() {
+        return "Nome: " + this.nome + " id:"+ this.id;
     }
 }

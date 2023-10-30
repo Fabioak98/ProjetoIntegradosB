@@ -46,7 +46,7 @@ public class AgendaController {
 
     @PostMapping("/reagendamento")
     @Transactional
-    public ResponseEntity reagendamento(@RequestBody @Valid DadosReagendamentoConsulta dados){
+    public ResponseEntity reagendamento(@RequestBody @Valid DadosReagendamentoConsulta dados) throws ExecutionException, InterruptedException {
         agendamento.reagendamento(dados);
         return ResponseEntity.ok().build();
     }
