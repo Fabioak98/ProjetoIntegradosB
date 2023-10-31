@@ -34,6 +34,7 @@ public class Profissional {
     private Boolean ativo;
     private Map<DayOfWeek,List<String>> agenda;
     private Avaliacao avaliacao;
+    private String biografia;
     @DBRef
     private List<Consulta> consultas;
 
@@ -47,6 +48,7 @@ public class Profissional {
         this.agenda = inicialAgenda();
         this.consultas = new ArrayList<Consulta>();
         this.avaliacao = new Avaliacao();
+        this.biografia = "";
         this.ativo = true;
     }
 

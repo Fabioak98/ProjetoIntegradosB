@@ -40,13 +40,13 @@ public class ReagendamentoManager {
         while (!consulta.getListaEspera().isEmpty()){
             System.out.println("Entro no while");
             var paciente = consulta.chamaPaciente();
+            consulta = consultaRepository.save(consulta);
             System.out.println(paciente);
-            consulta =chamaPaciente(paciente, consulta);
+            consulta = chamaPaciente(paciente, consulta);
             if(consulta.getStatus() == Status.CONFIRMADO){
                 System.out.println("Reagendou");
                 break;
             }
-            consulta = consultaRepository.save(consulta);
         }
         if(consulta.getStatus() == Status.REAGENDANDO){
             profissional.removeConsulta(consulta);
@@ -58,17 +58,19 @@ public class ReagendamentoManager {
 
     public Consulta chamaPaciente(Paciente paciente,Consulta c) throws InterruptedException {
         LocalDateTime start = LocalDateTime.now();
-        LocalDateTime end = start.plusSeconds(30);
+        LocalDateTime end = start.plusMinutes(1);
         var token = tokenService.gerarToken(paciente.getEmail(),end.toInstant(ZoneOffset.of("-03:00")));
         //Envia mensagem whatsapp
         var consulta = c;
         while(start.isBefore(end)){
-            if(consulta.getPaciente().getId().equals(paciente.getId())){
+            if(consulta.getStatus() == Status.CONFIRMADO){
                 return consulta;
             }
+            System.out.println("Thread Criada" + Thread.currentThread());
             Thread.sleep(10000);
+            consulta = consultaRepository.findById(consulta.getId()).get();
             start = LocalDateTime.now();
         }
-        return null;
+        return consulta;
     }
 }

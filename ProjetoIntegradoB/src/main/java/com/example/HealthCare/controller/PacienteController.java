@@ -1,5 +1,6 @@
 package com.example.HealthCare.controller;
 
+import com.example.HealthCare.domain.consulta.DadosDetalhamentoConsulta;
 import com.example.HealthCare.domain.paciente.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -8,6 +9,8 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+
+import java.nio.file.Path;
 
 @RestController
 @RequestMapping("pacientes")
@@ -34,6 +37,13 @@ public class PacienteController {
     public ResponseEntity detalhamento(@PathVariable String id){
         var paciente = repository.findById(id).get();
         return ResponseEntity.ok(new DadosDetalhamentoPaciente(paciente));
+    }
+
+    @GetMapping("/consultas/{id}")
+    public ResponseEntity consutasPaciente(@PathVariable String id){
+        var paciente = repository.findById(id).get();
+        var lista = paciente.getConsultas().stream().map(DadosDetalhamentoConsulta::new).toList();
+        return ResponseEntity.ok(lista);
     }
 
 

@@ -118,6 +118,7 @@ public class Agendamento {
         consulta.setStatus(Status.REAGENDANDO);
 
         consulta = consultaRepository.save(consulta);
+        System.out.println(consulta.getStatus());
 
         System.out.println("Main Thread " + Thread.currentThread());
         reagendamentoManager.chamaListaEspera(consulta.getId());

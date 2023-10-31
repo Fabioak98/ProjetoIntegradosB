@@ -81,9 +81,19 @@ public class ProfissionalController {
         return ResponseEntity.ok(new DadosAgendaProfissional(profissional.getAgenda()));
     }
 
-    @GetMapping("/busca_especialidade/{especialidade}")
-    public ResponseEntity<List<DadosListagemProfissional>> consultaEspecialidade(@PathVariable String especialidade){
-        var lista = repository.findByEspecialidade(especialidade.toUpperCase()).stream().map(DadosListagemProfissional:: new).toList();
+    @GetMapping(value = {"/busca/{especialidade}&{cidade}"})
+    public ResponseEntity<List<DadosListagemProfissional>> consultaEspecialidade(@PathVariable(required = false) String especialidade,@PathVariable(required = false) String cidade){
+        List<DadosListagemProfissional> lista;
+        if(cidade.isEmpty() && !especialidade.isEmpty()){
+            lista = repository.findByEspecialidadeAndAtivoTrue(especialidade.toUpperCase()).stream().map(DadosListagemProfissional ::new).toList();
+        } else if (!cidade.isEmpty() && especialidade.isEmpty()) {
+           lista  = repository.findByEndereco_CidadeAndAtivoTrue(cidade).stream().map(DadosListagemProfissional ::new).toList();
+        }
+        else if (!cidade.isEmpty() && !especialidade.isEmpty()) {
+            lista = repository.findByEspecialidadeAndEndereco_CidadeAndAtivoTrue(especialidade.toUpperCase(), cidade).stream().map(DadosListagemProfissional::new).toList();
+        }else {
+            return  ResponseEntity.badRequest().build();
+        }
         return ResponseEntity.ok(lista);
     }
 

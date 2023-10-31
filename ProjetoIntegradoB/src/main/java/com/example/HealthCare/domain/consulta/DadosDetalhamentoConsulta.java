@@ -5,8 +5,8 @@ import com.example.HealthCare.domain.profissional.Profissional;
 
 import java.time.LocalDateTime;
 
-public record DadosDetalhamentoConsulta(String idConsulta, String Paciente, String idProfissional, String descricao, String lista) {
+public record DadosDetalhamentoConsulta(String idConsulta, String Paciente, String idProfissional, String descricao, String lista, LocalDateTime horarios) {
     public DadosDetalhamentoConsulta(Consulta c){
-        this(c.getId(), c.getPaciente().toString(), c.getProfissional().toString(), c.getDescricao(), c.getListaEspera().toString());
+        this(c.getId(), c.getPaciente().toString(), c.getProfissional().toString(), c.getDescricao(), c.getListaEspera().toString(), c.getData());
     }
 }
