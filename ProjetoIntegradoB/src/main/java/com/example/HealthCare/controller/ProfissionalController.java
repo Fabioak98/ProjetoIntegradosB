@@ -1,7 +1,6 @@
 package com.example.HealthCare.controller;
 
 import com.example.HealthCare.domain.avaliacao.DadosAvaliacao;
-import com.example.HealthCare.domain.consulta.Consulta;
 import com.example.HealthCare.domain.consulta.ConsultaRepository;
 import com.example.HealthCare.domain.consulta.DadosDetalhamentoConsulta;
 import com.example.HealthCare.domain.profissional.*;
@@ -64,10 +63,10 @@ public class ProfissionalController {
 
     @PostMapping("/horarios")
     @Transactional
-    public ResponseEntity registraHorarios(@RequestBody @Valid DadosCrudPerfil dados,UriComponentsBuilder uriComponentsBuilder){
+    public ResponseEntity registraHorarios(@RequestBody @Valid DadosCadastraAgenda dados, UriComponentsBuilder uriComponentsBuilder){
         var profissional = repository.findById(dados.id()).get();
 
-        profissional.atualizaAgenda(dados);
+        profissional.atualizaAgenda(dados.horarios());
 
         var uri = uriComponentsBuilder.path("/profissional/perfil/{id}").buildAndExpand(profissional.getId()).toUri();
 
@@ -82,15 +81,15 @@ public class ProfissionalController {
     }
 
     @GetMapping(value = {"/busca/{especialidade}&{cidade}"})
-    public ResponseEntity<List<DadosListagemProfissional>> consultaEspecialidade(@PathVariable(required = false) String especialidade,@PathVariable(required = false) String cidade){
-        List<DadosListagemProfissional> lista;
+    public ResponseEntity<Page<DadosListagemProfissional>> consultaEspecialidade(@PathVariable(required = false) String especialidade,@PathVariable(required = false) String cidade, @PageableDefault Pageable page){
+        Page<DadosListagemProfissional> lista;
         if(cidade.isEmpty() && !especialidade.isEmpty()){
-            lista = repository.findByEspecialidadeAndAtivoTrue(especialidade.toUpperCase()).stream().map(DadosListagemProfissional ::new).toList();
+            lista = repository.findByEspecialidadeAndAtivoTrue(especialidade.toUpperCase(),page).map(DadosListagemProfissional ::new);
         } else if (!cidade.isEmpty() && especialidade.isEmpty()) {
-           lista  = repository.findByEndereco_CidadeAndAtivoTrue(cidade).stream().map(DadosListagemProfissional ::new).toList();
+           lista  = repository.findByEndereco_CidadeAndAtivoTrue(cidade,page).map(DadosListagemProfissional ::new);
         }
         else if (!cidade.isEmpty() && !especialidade.isEmpty()) {
-            lista = repository.findByEspecialidadeAndEndereco_CidadeAndAtivoTrue(especialidade.toUpperCase(), cidade).stream().map(DadosListagemProfissional::new).toList();
+            lista = repository.findByEspecialidadeAndEndereco_CidadeAndAtivoTrue(especialidade.toUpperCase(), cidade,page).map(DadosListagemProfissional::new);
         }else {
             return  ResponseEntity.badRequest().build();
         }

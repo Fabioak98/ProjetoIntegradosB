@@ -1,5 +1,6 @@
 package com.example.HealthCare;
 
+import com.twilio.Twilio;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -12,7 +13,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableAsync
 public class HealthCareApplication {
 
+	public static final String ACCOUNT_SID = "AC2e6c990758d4b1e5228c43b2dd5ece71";
+	public static final String AUTH_TOKEN = "4f7e597cb3dfdce39a3f1d59ab210a42";
+
 	public static void main(String[] args) {
+		Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
 		SpringApplication.run(HealthCareApplication.class, args);
 	}
 

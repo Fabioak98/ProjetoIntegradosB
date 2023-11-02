@@ -3,6 +3,7 @@ package com.example.HealthCare.domain.profissional;
 import com.example.HealthCare.domain.avaliacao.Avaliacao;
 import com.example.HealthCare.domain.consulta.Consulta;
 import com.example.HealthCare.domain.endereco.Endereco;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -11,7 +12,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.*;
 
 @Getter
@@ -73,11 +73,17 @@ public class Profissional {
         if(dados.endereco() != null){
             this.endereco.atualizarInformacoes(dados.endereco());
         }
+        if(dados.horarios() != null){
+            atualizaAgenda(dados.horarios());
+        }
+        if(dados.biografia() != null){
+            this.biografia = dados.biografia();
+        }
     }
 
-    public void atualizaAgenda(DadosCrudPerfil dadosCrudPerfil){
-        for(DayOfWeek day: dadosCrudPerfil.horarios().keySet()){
-            this.agenda.put(day,dadosCrudPerfil.horarios().get(day));
+    public void atualizaAgenda(Map<DayOfWeek, List<String>> dados){
+        for(DayOfWeek day: dados.keySet()){
+            this.agenda.put(day, dados.get(day));
         }
     }
 

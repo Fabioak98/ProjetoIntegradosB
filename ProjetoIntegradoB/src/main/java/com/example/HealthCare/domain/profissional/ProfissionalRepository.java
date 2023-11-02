@@ -12,9 +12,9 @@ public interface ProfissionalRepository extends MongoRepository<Profissional,Str
     @Query("{'ativo': true}")
     Page<Profissional> findAllByAtivoTrue(Pageable paginacao);
 
-    List<Profissional> findByEspecialidadeAndAtivoTrue(String especialidade);
-    List<Profissional> findByEndereco_CidadeAndAtivoTrue(String cidade);
+    Page<Profissional> findByEspecialidadeAndAtivoTrue(String especialidade,Pageable page);
+    Page<Profissional> findByEndereco_CidadeAndAtivoTrue(String cidade,Pageable page);
 
-    List<Profissional> findByEspecialidadeAndEndereco_CidadeAndAtivoTrue(String especialidade, String cidade);
+    Page<Profissional> findByEspecialidadeAndEndereco_CidadeAndAtivoTrue(String especialidade, String cidade,Pageable page);
     Profissional findByEmail(String login);
 }

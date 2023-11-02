@@ -68,7 +68,7 @@ public class Agendamento {
             profissional.addConsulta(consulta);
             profissionalRepository.save(profissional);
 
-            adicionaListaEspera(profissional,dados.diasLivres(),paciente);
+            adicionaListaEspera(profissional,dados.diasLivres(),paciente,consulta.getData());
 
             return consulta;
         }
@@ -77,22 +77,25 @@ public class Agendamento {
         }
     }
 
-    private void adicionaListaEspera(Profissional profissional, List<LocalDate> data, Paciente paciente) {
+    private void adicionaListaEspera(Profissional profissional, List<DayOfWeek> data, Paciente paciente, LocalDateTime consulta) {
         if(data != null) {
-            for (LocalDate l : data) {
-                var dia = LocalDate.of(l.getYear(), l.getMonth(), l.getDayOfMonth());
-                var dataM = dia.plusDays(1);
+            var dia = LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonth(), LocalDate.now().getDayOfMonth());
+            var dataM = LocalDate.of(consulta.getYear(), consulta.getMonth(), consulta.getDayOfMonth());
 
-                Instant apartir = dia.atStartOfDay(ZoneId.systemDefault()).toInstant();
-                Instant ate = dataM.atStartOfDay(ZoneId.systemDefault()).toInstant();
+            Instant apartir = dia.atStartOfDay(ZoneId.systemDefault()).toInstant();
+            Instant ate = dataM.atStartOfDay(ZoneId.systemDefault()).toInstant();
 
 
-                List<Consulta> consultas = consultaRepository.findByDataBetweenAndProfissional(apartir,ate,profissional);
-                System.out.println(consultas);
-                consultas.forEach(consulta -> {
-                    consulta.addListadeEspera(paciente);
-                    consultaRepository.save(consulta);
-                });
+            List<Consulta> consultas = consultaRepository.findByDataBetweenAndProfissional(apartir,ate,profissional);
+            for (Consulta consulta1 : consultas) {
+                DayOfWeek diaSem = consulta1.getData().getDayOfWeek();
+                if (data.contains(diaSem)) {
+                    var aux = consulta1.getListaEspera().stream().filter(p -> p.getId().equals( paciente.getId())).findFirst().orElse(null);
+                    if(aux == null){
+                        consulta1.addListadeEspera(paciente);
+                        consultaRepository.save(consulta1);
+                    }
+                }
             }
         }
     }

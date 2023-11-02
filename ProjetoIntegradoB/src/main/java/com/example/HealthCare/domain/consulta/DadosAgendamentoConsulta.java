@@ -4,6 +4,7 @@ import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -17,5 +18,5 @@ public record DadosAgendamentoConsulta(
         String descricao,
         @Future
         LocalDateTime data,
-        List<LocalDate> diasLivres) {
+        List<DayOfWeek> diasLivres) {
 }

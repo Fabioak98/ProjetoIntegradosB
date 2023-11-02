@@ -4,6 +4,7 @@ import com.example.HealthCare.domain.paciente.Paciente;
 import com.example.HealthCare.domain.paciente.PacienteRepository;
 import com.example.HealthCare.domain.profissional.Profissional;
 import com.example.HealthCare.domain.profissional.ProfissionalRepository;
+import com.example.HealthCare.domain.twilio.TwilioService;
 import com.example.HealthCare.domain.usuario.Usuario;
 import com.example.HealthCare.infra.security.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,9 @@ public class ReagendamentoManager {
 
     @Autowired
     private TokenService tokenService;
+
+    @Autowired
+    private TwilioService twilioService;
 
     @Async
     public void chamaListaEspera(String idConsulta) throws InterruptedException {
@@ -60,7 +64,7 @@ public class ReagendamentoManager {
         LocalDateTime start = LocalDateTime.now();
         LocalDateTime end = start.plusMinutes(1);
         var token = tokenService.gerarToken(paciente.getEmail(),end.toInstant(ZoneOffset.of("-03:00")));
-        //Envia mensagem whatsapp
+        twilioService.enviaMensagem("Mensagem de reagendamento");
         var consulta = c;
         while(start.isBefore(end)){
             if(consulta.getStatus() == Status.CONFIRMADO){
