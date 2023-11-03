@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "hazel-core-396323",
+  "private_key_id": "89e7920475decbcf9e1feb0e6374d42f3a749952",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCToGBF5MM0T0ED\ntUOj1AgSMP8iq+Mq+ka1OlE5Y21AzYQG5LMReVJ1VOcfY1ENfbcbQDH/fFs3WY8a\nz3aI3huS1hK8tRSQobkiSbFdB0FmaJIdkKHDlyQVc/AVrpeZOmJJS2cJ3ZWVk0n0\n2NJxxhOHohUvU0RxbX8UrPUbCwUOL8gcQUaDwogGR1AcubDPtOzRZQFei+SoYBiD\ng9Ih0VYu0LbNl6ZvWGe4R2SDdVfRWy9yx3BCKLcA8QjNOG+23v+fNqASEyaBMdNw\nXzid9hH1k8eJDWTz3Zl5Ep849e/wfBNlNkmEgbGnOvvlJ76Ne3nzlcvD3pfTJHDA\nKQK1jvdBAgMBAAECggEAJJXGthuS2thXSuV1nVizJVr6J6wEcMa0lj4dGgVPcpNc\nCF9OF2MDMeu4GXnCAP9qTPkUSvYVHvr1cZX/kLzGhZXC7/xKW+uQV3R+3YiqRwhc\nSbJpvHCs8xoX4i+yBznGWNa0cuf0paxqVCEVyjdl6KOc720J1bhmmYeheLG674A8\nbQM946dVnpQMm/8a8paPFyuVDUwQRQ9dIp+0eRNHNegO5lbIYMO0CuWaedgSlGU2\n7PLN0v4L5ne8mDPzVHfpbUz/H3fzXwB+ILvMziZxOKmKiMDXtOuso9h+rikprusY\nON+aEOZcA4QQjZIpTEbxJOfC/LFvb0eiQocvf/MXPwKBgQDNeCKpZBgzC1PswSsG\nK0uf53v0PMulQ8EG4sxGC/X/beqnx8Szq/3aMx4uebAUHtk26MFcufeUuSH9k438\nZgh3CcNai0bYqokvCv1AphKBAUqyZyaSlRbVQP+7GD7BnIFYyNsXmuv9jPmwgUjb\nApG4f0S77iSuat8Tyoa/xfHjswKBgQC37pfDQwAc4mYL5qV/tAgNrC7r0AvdfiVd\n3oXM7yAYtABEJocI3mJpyzaaXV0ySd/SOAyjDI5eTWTutmwMPajdUUPCCiyGuYJI\nd8tAOvv3zNxABjmxC4XffLUrWKpidbrDoI9CE5F7C7aaTwupwoCRkEu8aCY+GfzJ\nM/9WD6gPOwKBgHAZ129ruPhAee12Bq869+uqNCqw8LqeGLZVDvY4mGJf6eLYTy1n\n7PwbX6AjrDmOCxy2KKkanUV7LFxZIOJQGNY5cWf5DRIxGN+ds0aOVRIlTke/l3/p\n76cx61R8ieDALqHuE/rw/0g6ng/6uXEkGbT7WtjduQ2gKU129cWzjaGZAoGBALOT\nhaZFVuncfIcoA/L/YVGABzuCHuN8Up0oMXgZCzwzGYNwHiyhenIRzli9yMzdZWHI\nCUZzbthRNbb+cdUtqh2SRtY+uqQ6oCGCm/U04WZZI7x6l37sYiMFjZgpdAi3KsXu\nj4+SrVn14K0deaSfWolD2T20bYn6M1x5oNR0ar+bAoGAWbpXhuoy/c9bGHZNKydC\n2RRGmHXWH+A9JeASP6whtce4XmNXF1MuefcukNRBnaKyvm3HmdFdWQOvOg5ARLK5\n2nBCuZYNrrOMFmSm+6rZREa8X2dqE3MZgFImzBA4A9bVPF7w1PqHLXZ9+j7/l0dz\nMIzxNjP147NYzRUsqAtOLJ8=\n-----END PRIVATE KEY-----\n",
+  "client_email": "porfavor-vai@hazel-core-396323.iam.gserviceaccount.com",
+  "client_id": "116434067940770953086",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/porfavor-vai%40hazel-core-396323.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

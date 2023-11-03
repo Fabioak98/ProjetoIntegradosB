@@ -14,6 +14,7 @@ public record DadosAtualizacaoProfissional(
         String telefone,
         DadosEndereco endereco,
         Map<DayOfWeek, List<String>> horarios,
-        String biografia
+        String biografia,
+        Double valor
 ){
 }

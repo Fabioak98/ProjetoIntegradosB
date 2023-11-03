@@ -35,6 +35,8 @@ public class Profissional {
     private Map<DayOfWeek,List<String>> agenda;
     private Avaliacao avaliacao;
     private String biografia;
+    private String foto;
+    private Double valor;
     @DBRef
     private List<Consulta> consultas;
 
@@ -78,6 +80,9 @@ public class Profissional {
         }
         if(dados.biografia() != null){
             this.biografia = dados.biografia();
+        }
+        if(dados.valor() != null){
+            this.valor = dados.valor();
         }
     }
 
