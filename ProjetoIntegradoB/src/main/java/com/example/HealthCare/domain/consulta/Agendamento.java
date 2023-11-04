@@ -132,16 +132,15 @@ public class Agendamento {
     public void reagendamento(DadosReagendamentoConsulta dados) throws ExecutionException, InterruptedException {
         var consultaAt = consultaRepository.findById(dados.idConsultaAT()).get();
         var paciente = pacienteRepository.findById(dados.idPaciente()).get();
-        if(consultaAt.getPaciente() == null || consultaAt.getListaEspera().contains(paciente)){
-            var consultaRg = consultaRepository.findById(dados.idConsultaRG()).get();
-            if(consultaRg.getPaciente().getId().equals(dados.idPaciente())){
-                consultaAt.setDescricao(consultaRg.getDescricao());
-                consultaAt.setPaciente(paciente);
-                consultaAt.setStatus(Status.CONFIRMADO);
-                consultaRepository.save(consultaAt);
+        var consultaRg = consultaRepository.findById(dados.idConsultaRG()).get();
+        if(consultaRg.getPaciente().getId().equals(dados.idPaciente())){
+            consultaAt.setDescricao(consultaRg.getDescricao());
+            consultaAt.setPaciente(paciente);
+            consultaAt.setStatus(Status.CONFIRMADO);
+            paciente.addConsulta(consultaRepository.save(consultaAt));
 
-                cancelaConsulta(consultaRg.getId(), dados.idPaciente(), consultaRg.getProfissional().getId());
-            }
+            cancelaConsulta(consultaRg.getId(), dados.idPaciente(), consultaRg.getProfissional().getId());
         }
+
     }
 }

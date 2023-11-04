@@ -12,9 +12,12 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.Map;
 
 @Service
 @EnableAsync
@@ -42,6 +45,7 @@ public class ReagendamentoManager {
         var profissional = consulta.getProfissional();
         System.out.println(consulta.getListaEspera());
         while (!consulta.getListaEspera().isEmpty()){
+
             System.out.println("Entro no while");
             var paciente = consulta.chamaPaciente();
             consulta = consultaRepository.save(consulta);
@@ -62,16 +66,17 @@ public class ReagendamentoManager {
 
     public Consulta chamaPaciente(Paciente paciente,Consulta c) throws InterruptedException {
         LocalDateTime start = LocalDateTime.now();
-        LocalDateTime end = start.plusMinutes(1);
+        LocalDateTime end = start.plusMinutes(10);
         var token = tokenService.gerarToken(paciente.getEmail(),end.toInstant(ZoneOffset.of("-03:00")));
         twilioService.enviaMensagem("Mensagem de reagendamento");
         var consulta = c;
         while(start.isBefore(end)){
             if(consulta.getStatus() == Status.CONFIRMADO){
+                System.out.println("REAGENDOU");
                 return consulta;
             }
             System.out.println("Thread Criada" + Thread.currentThread());
-            Thread.sleep(10000);
+            Thread.sleep(1000);
             consulta = consultaRepository.findById(consulta.getId()).get();
             start = LocalDateTime.now();
         }

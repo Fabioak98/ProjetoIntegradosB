@@ -14,7 +14,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class HealthCareApplication {
 
 	public static final String ACCOUNT_SID = "AC2e6c990758d4b1e5228c43b2dd5ece71";
-	public static final String AUTH_TOKEN = "4f7e597cb3dfdce39a3f1d59ab210a42";
+	public static final String AUTH_TOKEN = "3ffcc506615e532ec10fce1e348770ae";
 
 	public static void main(String[] args) {
 		Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
