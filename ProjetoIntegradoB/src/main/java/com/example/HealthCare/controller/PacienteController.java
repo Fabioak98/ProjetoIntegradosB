@@ -1,6 +1,7 @@
 package com.example.HealthCare.controller;
 
 import com.example.HealthCare.domain.consulta.DadosDetalhamentoConsulta;
+import com.example.HealthCare.domain.file.FileServiceImpl;
 import com.example.HealthCare.domain.paciente.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -9,8 +10,10 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.util.UriComponentsBuilder;
 
-import java.nio.file.Path;
+import java.io.IOException;
 
 @RestController
 @RequestMapping("pacientes")
@@ -18,6 +21,9 @@ public class PacienteController {
 
     @Autowired
     private PacienteRepository repository;
+
+    @Autowired
+    private FileServiceImpl fileService;
 
 
     @GetMapping
@@ -44,6 +50,20 @@ public class PacienteController {
         var paciente = repository.findById(id).get();
         var lista = paciente.getConsultas().stream().map(DadosDetalhamentoConsulta::new).toList();
         return ResponseEntity.ok(lista);
+    }
+
+    @PostMapping("/upload")
+    @Transactional
+    public ResponseEntity<String> uploadFoto(@RequestParam MultipartFile foto, @RequestParam String id, UriComponentsBuilder uriComponentsBuilder) throws IOException {
+        var paciente = repository.findById(id).get();
+        if(paciente !=null || foto != null){
+            String filename = foto.getOriginalFilename();
+            String tipo = filename.substring(filename.lastIndexOf(".") + 1);
+            fileService.uploadFile(foto, paciente.getId());
+            paciente.setFoto("https://storage.googleapis.com/pib-bucket-fots/" + id + "." + tipo);
+            repository.save(paciente);
+        }
+        return ResponseEntity.ok().build();
     }
 
 

@@ -32,11 +32,13 @@ public class Consulta {
     @DBRef
     private List<Paciente> listaEspera;
     private Status status;
+    private String idPacienteChamado;
 
     public Consulta(DadosAgendamentoConsulta dados){
         this.data = dados.data();
         this.descricao = dados.descricao();
         this.listaEspera = new ArrayList<>();
+        this.idPacienteChamado = "";
         this.status = Status.CONFIRMADO;
     }
 
@@ -50,6 +52,8 @@ public class Consulta {
     }
 
     public Paciente chamaPaciente() {
-        return listaEspera.remove(0);
+        var paciente = listaEspera.remove(0);
+        this.idPacienteChamado = paciente.getId();
+        return paciente;
     }
 }

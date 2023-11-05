@@ -137,6 +137,7 @@ public class Agendamento {
             consultaAt.setDescricao(consultaRg.getDescricao());
             consultaAt.setPaciente(paciente);
             consultaAt.setStatus(Status.CONFIRMADO);
+            consultaAt.setIdPacienteChamado("");
             paciente.addConsulta(consultaRepository.save(consultaAt));
 
             cancelaConsulta(consultaRg.getId(), dados.idPaciente(), consultaRg.getProfissional().getId());

@@ -18,4 +18,17 @@ public class TwilioService {
 
         System.out.println(message.getSid());
     }
+
+    public void enviaMensagem(String mensagem, String telefone){
+        String numero = "whatsapp:" + telefone;
+        System.out.println(numero);
+        System.out.println(numero.equals("whatsapp:+5513996681010"));
+        Message message = Message.creator(
+                        new com.twilio.type.PhoneNumber("whatsapp:+5513996681010"),
+                        new com.twilio.type.PhoneNumber("whatsapp:+14155238886"),
+                        mensagem)
+                .create();
+
+        System.out.println(message.getSid());
+    }
 }

@@ -31,6 +31,7 @@ public class Paciente {
     private String cpf;
     private Endereco endereco;
     private Boolean ativo;
+    private String foto;
     @DBRef
     private List<Consulta> consultas;
 

@@ -133,13 +133,13 @@ public class ProfissionalController {
 
     @PostMapping("/upload")
     @Transactional
-    public ResponseEntity<String> uploadFoto(@RequestParam MultipartFile foto, @RequestParam String idProfissional, UriComponentsBuilder uriComponentsBuilder) throws IOException {
-        var profissional = repository.findById(idProfissional).get();
+    public ResponseEntity<String> uploadFoto(@RequestParam MultipartFile foto, @RequestParam String id, UriComponentsBuilder uriComponentsBuilder) throws IOException {
+        var profissional = repository.findById(id).get();
         if(profissional!=null || foto != null){
             String filename = foto.getOriginalFilename();
             String tipo = filename.substring(filename.lastIndexOf(".") + 1);
             fileService.uploadFile(foto,profissional.getId());
-            profissional.setFoto("https://storage.googleapis.com/pib-bucket-fots/" + idProfissional + "." + tipo);
+            profissional.setFoto("https://storage.googleapis.com/pib-bucket-fots/" + id + "." + tipo);
             repository.save(profissional);
         }
         return ResponseEntity.ok().build();
