@@ -98,7 +98,7 @@ public class ReagendamentoManager {
             LocalDate diaR = LocalDate.of(consultaR.getData().getYear(), consultaR.getData().getMonthValue(), consultaR.getData().getDayOfMonth());
             int horasR = consultaR.getData().getHour();
             int minutosR = consultaR.getData().getMinute();
-            String url = "http://localhost:3000/reagendamento/" + consulta.getId() + "&" + consultaR.getId();
+            String url = "http://healthycare.localhost:3000/reagendamento/" + consulta.getId() + "/" + consultaR.getId();
             return "Deseja reagenda sua consulta do dia " + diaR + " as " + String.format("%02d",horasR) + ":" + String.format("%02d",minutosR) +
                     " para o dia" + diaC + " as " + String.format("%02d",horasC) + ":" + String.format("%02d",minutosC) + "? Para confirmar acesse o link: " + url;
         }

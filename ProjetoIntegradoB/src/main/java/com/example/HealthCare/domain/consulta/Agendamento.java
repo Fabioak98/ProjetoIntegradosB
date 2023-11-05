@@ -138,9 +138,15 @@ public class Agendamento {
             consultaAt.setPaciente(paciente);
             consultaAt.setStatus(Status.CONFIRMADO);
             consultaAt.setIdPacienteChamado("");
-            paciente.addConsulta(consultaRepository.save(consultaAt));
+            Consulta consulta = consultaRepository.save(consultaAt);
+            System.out.println(consulta);
+            paciente.addConsulta(consultaRepository.save(consulta));
+            pacienteRepository.save(paciente);
 
             cancelaConsulta(consultaRg.getId(), dados.idPaciente(), consultaRg.getProfissional().getId());
+        }
+        else{
+            throw new RuntimeException("");
         }
 
     }

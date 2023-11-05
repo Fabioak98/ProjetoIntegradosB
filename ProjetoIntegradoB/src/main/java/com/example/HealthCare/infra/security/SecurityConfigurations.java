@@ -34,7 +34,7 @@ public class SecurityConfigurations {
                     req.requestMatchers(HttpMethod.POST, "/login").permitAll();
                     req.requestMatchers(HttpMethod.POST,"/cadastro/profissional").permitAll();
                     req.requestMatchers(HttpMethod.POST,"cadastro/paciente").permitAll();
-                    req.requestMatchers(HttpMethod.POST,"/twilio").permitAll();
+                    req.requestMatchers(HttpMethod.POST,"/agenda/reagendamento").permitAll();
                     req.anyRequest().authenticated();
                 })
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
